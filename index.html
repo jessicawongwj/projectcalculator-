@@ -1,0 +1,704 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cost Calculator - Charlton Brown Style</title>
+    <style>
+        :root {
+            /* Charlton Brown Color Scheme */
+            --cb-blue-dark: #0056A6;
+            --cb-blue-medium: #0070C0;
+            --cb-white: #FFFFFF;
+            --cb-text-dark: #333333;
+            --cb-bg-light: #F5F5F5;
+            --cb-accent-orange: #F15A22;
+            --cb-border: #DEDEDE;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--cb-bg-light);
+            color: var(--cb-text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--cb-white);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--cb-blue-dark);
+            color: var(--cb-white);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-mark {
+            background-color: var(--cb-white);
+            color: var(--cb-blue-dark);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 22px;
+            font-family: Arial Black, sans-serif;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-name {
+            font-weight: 900;
+            font-size: 22px;
+            color: var(--cb-white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: Arial Black, sans-serif;
+        }
+        
+        .logo-tagline {
+            font-size: 14px;
+            color: var(--cb-white);
+            font-weight: bold;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 30px;
+        }
+        
+        h1 {
+            color: var(--cb-blue-dark);
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 900;
+        }
+        
+        h2 {
+            color: var(--cb-blue-medium);
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cb-blue-medium);
+            font-size: 22px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            background: var(--cb-white);
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid var(--cb-blue-medium);
+        }
+        
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--cb-blue-dark);
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--cb-border);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--cb-blue-medium);
+            box-shadow: 0 0 0 2px rgba(0, 86, 166, 0.2);
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        
+        th, td {
+            border: 1px solid var(--cb-border);
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--cb-blue-dark);
+            color: var(--cb-white);
+            font-weight: bold;
+        }
+        
+        .category-header {
+            background-color: #E6F0F8;
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--cb-blue-dark);
+        }
+        
+        .total-row {
+            font-weight: bold;
+            background-color: var(--cb-bg-light);
+        }
+        
+        .input-number {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--cb-border);
+            border-radius: 4px;
+            text-align: right;
+        }
+        
+        /* Summary Card Styles */
+        .summary-card {
+            background: var(--cb-white);
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 20px 0;
+            border-top: 4px solid var(--cb-blue-medium);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-item {
+            padding: 15px;
+            background-color: var(--cb-bg-light);
+            border-radius: 4px;
+        }
+        
+        .summary-label {
+            font-size: 16px;
+            color: var(--cb-blue-dark);
+            margin-bottom: 5px;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--cb-blue-dark);
+        }
+        
+        .currency {
+            font-size: 16px;
+            color: var(--cb-text-dark);
+        }
+        
+        /* Button Styles */
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--cb-blue-dark);
+            color: var(--cb-white);
+        }
+        
+        .btn-primary:hover {
+            background-color: #00458C;
+        }
+        
+        .btn-secondary {
+            background-color: var(--cb-blue-medium);
+            color: var(--cb-white);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #005EA6;
+        }
+        
+        .btn-accent {
+            background-color: var(--cb-accent-orange);
+            color: var(--cb-white);
+        }
+        
+        .btn-accent:hover {
+            background-color: #E04B1B;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-mark">CB</div>
+                <div class="logo-text">
+                    <div class="logo-name">Project Cost Calculator</div>
+                    <div class="logo-tagline">Education Specialists</div>
+                </div>
+            </div>
+            <div id="proposal-date-display"></div>
+        </header>
+        
+        <div class="main-content">
+            <h1>Program Cost Calculator</h1>
+            
+            <div class="section" id="proposal-info">
+                <h2>Proposal Information</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="client-name">Client Name</label>
+                        <input type="text" id="client-name" class="input-field">
+                    </div>
+                    <div class="form-group">
+                        <label for="proposal-date">Date</label>
+                        <input type="date" id="proposal-date" class="input-field">
+                    </div>
+                    <div class="form-group">
+                        <label for="student-year">Student Year</label>
+                        <input type="text" id="student-year" class="input-field">
+                    </div>
+                    <div class="form-group">
+                        <label for="student-count">Number of Students</label>
+                        <input type="number" id="student-count" class="input-field" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="program-dates">Program Dates</label>
+                        <input type="text" id="program-dates" class="input-field" placeholder="e.g. 15/07/2023 - 30/07/2023">
+                    </div>
+                    <div class="form-group">
+                        <label for="program-duration">Program Duration (days)</label>
+                        <input type="number" id="program-duration" class="input-field" min="1" value="7">
+                    </div>
+                    <div class="form-group">
+                        <label for="class-times">Class Times</label>
+                        <input type="text" id="class-times" class="input-field" placeholder="e.g. 9:00 AM - 3:00 PM">
+                    </div>
+                    <div class="form-group">
+                        <label for="expiry-date">Proposal Expiry Date</label>
+                        <input type="date" id="expiry-date" class="input-field">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="detailed-inclusions">Detailed Inclusions</label>
+                    <textarea id="detailed-inclusions" class="input-field" rows="3"></textarea>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Project Components</h2>
+                <table id="cost-table">
+                    <thead>
+                        <tr>
+                            <th width="20%">Category</th>
+                            <th width="30%">Item</th>
+                            <th width="10%">Quantity</th>
+                            <th width="10%">Unit</th>
+                            <th width="15%">Unit Price (AUD)</th>
+                            <th width="15%">Total (AUD)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="components-body">
+                        <!-- Components will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="summary-card">
+                <h2>Cost Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Project Cost</div>
+                        <div class="summary-value" id="grand-total">0.00 <span class="currency">AUD</span></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Cost per Student</div>
+                        <div class="summary-value" id="cost-per-student">0.00 <span class="currency">AUD</span></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Cost per Day</div>
+                        <div class="summary-value" id="cost-per-day">0.00 <span class="currency">AUD</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="quotation-per-student">Quotation Per Student (AUD)</label>
+                <input type="number" id="quotation-per-student" class="input-field" step="0.01" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="client-signature">Client Signature Name</label>
+                <input type="text" id="client-signature" class="input-field">
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn btn-accent" id="generate-report">Generate Proposal</button>
+                <button class="btn btn-secondary" id="reset-form">Reset Form</button>
+                <button class="btn btn-primary" id="save-proposal">Save Proposal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete dataset with all project components
+        const projectComponents = [
+            // Labour Costs
+            { category: "Labour Cost", item: "Trainer Cost - Business Days (per hour)", unit: "hour", price: 50.00 },
+            { category: "Labour Cost", item: "Trainer Cost - Weekend (20% Levy)", unit: "hour", price: 60.00 },
+            { category: "Labour Cost", item: "Administrative Cost - Business Days", unit: "hour", price: 35.00 },
+            { category: "Labour Cost", item: "Administrative Cost - Weekend (20% Levy)", unit: "hour", price: 42.00 },
+            { category: "Labour Cost", item: "Media Team Cost – Business Days", unit: "hour", price: 45.00 },
+            
+            // Learning Materials
+            { category: "Learning Materials", item: "Child Care (Equipment Usage)", unit: "set", price: 25.00 },
+            { category: "Learning Materials", item: "Cookery (Cooking Materials)", unit: "set", price: 15.00 },
+            { category: "Learning Materials", item: "ELICOS (Printing Material)", unit: "set", price: 10.00 },
+            { category: "Learning Materials", item: "First Aid", unit: "kit", price: 30.00 },
+            
+            // Course-Related Direct Costs
+            { category: "Course-Related Direct Costs", item: "Cookery - Commercial Cookery Kitchen", unit: "session", price: 200.00 },
+            
+            // Transport Costs
+            { category: "Transport Costs", item: "Airport Pick-up/Drop-off", unit: "trip", price: 120.00 },
+            { category: "Transport Costs", item: "Transport to Other Destinations", unit: "trip", price: 150.00 },
+            { category: "Transport Costs", item: "Theme Park Transfer – 57 Seat Coach", unit: "trip", price: 350.00 },
+            { category: "Transport Costs", item: "Australia Zoo – 57 Seat Coach", unit: "trip", price: 400.00 },
+            { category: "Transport Costs", item: "Stradbroke Island Day Tour – 57 Seat Coach", unit: "trip", price: 450.00 },
+            { category: "Transport Costs", item: "8hr Tour Local – 57 Seat Coach", unit: "day", price: 600.00 },
+            { category: "Transport Costs", item: "8hr Tour Over 100km – 57 Seat Coach", unit: "day", price: 800.00 },
+            
+            // Accommodation Costs – Homestay
+            { category: "Accommodation Costs – Homestay", item: "Homestay Placement Fee - Individual", unit: "student", price: 250.00 },
+            { category: "Accommodation Costs – Homestay", item: "Homestay Placement Fee - Twin Share", unit: "student", price: 200.00 },
+            { category: "Accommodation Costs – Homestay", item: "Homestay Fee – Private Room", unit: "day", price: 40.00 },
+            { category: "Accommodation Costs – Homestay", item: "Homestay Fee – Twin Share Room", unit: "day", price: 35.00 },
+            { category: "Accommodation Costs – Homestay", item: "Dietary Requirements", unit: "day", price: 10.00 },
+            { category: "Accommodation Costs – Homestay", item: "Christmas Day Surcharge", unit: "day", price: 50.00 },
+            
+            // Accommodation Costs – Student Apartments
+            { category: "Accommodation Costs – Student Apartments", item: "Student Apartment Placement Fee", unit: "student", price: 300.00 },
+            { category: "Accommodation Costs – Student Apartments", item: "Student Apartment Fee", unit: "day", price: 60.00 },
+            
+            // Activity Costs
+            { category: "Activity Costs", item: "University Campus Tour - Full Day", unit: "group", price: 250.00 },
+            { category: "Activity Costs", item: "University Campus Tour - Half Day", unit: "group", price: 150.00 },
+            { category: "Activity Costs", item: "University Campus Tour + Science Lab Visit - Full Day", unit: "group", price: 350.00 },
+            { category: "Activity Costs", item: "University Campus Tour + Science Lab Visit - Half Day", unit: "group", price: 200.00 },
+            { category: "Activity Costs", item: "Day Tour in Brisbane", unit: "group", price: 300.00 },
+            { category: "Activity Costs", item: "Aviation Class", unit: "session", price: 400.00 },
+            { category: "Activity Costs", item: "High School Visit", unit: "group", price: 200.00 },
+            { category: "Activity Costs", item: "Day Tour to Gold Coast with Theme Park Visit", unit: "group", price: 500.00 },
+            { category: "Activity Costs", item: "Other Activities", unit: "activity", price: 100.00 },
+            
+            // Activity Add-ons
+            { category: "Activity Add-ons", item: "Campus Lunch", unit: "student", price: 15.00 },
+            { category: "Activity Add-ons", item: "Additional Counsellor (half day)", unit: "half day", price: 150.00 },
+            { category: "Activity Add-ons", item: "Additional Counsellor (full day)", unit: "day", price: 250.00 },
+            { category: "Activity Add-ons", item: "Japanese Assistant (half day)", unit: "half day", price: 120.00 },
+            { category: "Activity Add-ons", item: "Japanese Assistant (full day)", unit: "day", price: 200.00 },
+            { category: "Activity Add-ons", item: "Weekend/Public Holiday surcharge", unit: "day", price: 50.00 },
+            
+            // Escort Cost
+            { category: "Escort Cost", item: "Escort(s) Cost", unit: "day", price: 200.00 },
+            
+            // Enrollment Fees
+            { category: "Enrollment Fees", item: "Enrollment Fee", unit: "student", price: 100.00 }
+        ];
+
+        // Group components by category
+        const groupedComponents = projectComponents.reduce((acc, component) => {
+            if (!acc[component.category]) {
+                acc[component.category] = [];
+            }
+            acc[component.category].push(component);
+            return acc;
+        }, {});
+
+        // Populate the table
+        const tableBody = document.querySelector('#components-body');
+        
+        Object.entries(groupedComponents).forEach(([category, items]) => {
+            // Add category header row
+            const categoryRow = document.createElement('tr');
+            categoryRow.className = 'category-header';
+            categoryRow.innerHTML = `<td colspan="6">${category}</td>`;
+            tableBody.appendChild(categoryRow);
+            
+            // Add items for this category
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.category}</td>
+                    <td>${item.item}</td>
+                    <td><input type="number" class="input-number quantity" value="0" min="0"></td>
+                    <td>${item.unit}</td>
+                    <td><input type="number" class="input-number unit-price" value="${item.price.toFixed(2)}" min="0" step="0.01"></td>
+                    <td class="item-total">0.00</td>
+                `;
+                tableBody.appendChild(row);
+                
+                // Add event listeners for calculation
+                const quantityInput = row.querySelector('.quantity');
+                const priceInput = row.querySelector('.unit-price');
+                const totalCell = row.querySelector('.item-total');
+                
+                const calculateRow = () => {
+                    const quantity = parseFloat(quantityInput.value) || 0;
+                    const price = parseFloat(priceInput.value) || 0;
+                    totalCell.textContent = (quantity * price).toFixed(2);
+                    updateSummary();
+                };
+                
+                quantityInput.addEventListener('input', calculateRow);
+                priceInput.addEventListener('input', calculateRow);
+            });
+        });
+        
+        function updateSummary() {
+            // Calculate grand total
+            const itemTotals = document.querySelectorAll('.item-total');
+            let grandTotal = 0;
+            
+            itemTotals.forEach(cell => {
+                grandTotal += parseFloat(cell.textContent) || 0;
+            });
+            
+            document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+            
+            // Calculate per student cost
+            const studentCount = parseInt(document.getElementById('student-count').value) || 1;
+            const costPerStudent = grandTotal / studentCount;
+            document.getElementById('cost-per-student').textContent = costPerStudent.toFixed(2);
+            document.getElementById('quotation-per-student').value = costPerStudent.toFixed(2);
+            
+            // Calculate per day cost
+            const programDuration = parseInt(document.getElementById('program-duration').value) || 1;
+            document.getElementById('cost-per-day').textContent = (grandTotal / programDuration).toFixed(2);
+        }
+        
+        // Add event listeners for proposal info changes
+        document.getElementById('student-count').addEventListener('input', updateSummary);
+        document.getElementById('program-duration').addEventListener('input', updateSummary);
+        
+        // Reset form button
+        document.getElementById('reset-form').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all values?')) {
+                // Reset proposal info
+                document.getElementById('client-name').value = '';
+                document.getElementById('proposal-date').valueAsDate = new Date();
+                document.getElementById('student-year').value = '';
+                document.getElementById('student-count').value = '1';
+                document.getElementById('program-dates').value = '';
+                document.getElementById('program-duration').value = '7';
+                document.getElementById('class-times').value = '';
+                document.getElementById('expiry-date').value = '';
+                document.getElementById('detailed-inclusions').value = '';
+                document.getElementById('client-signature').value = '';
+                
+                // Reset component values
+                document.querySelectorAll('.quantity').forEach(input => input.value = '0');
+                document.querySelectorAll('.unit-price').forEach(input => {
+                    const originalPrice = projectComponents.find(
+                        item => item.item === input.closest('tr').querySelector('td:nth-child(2)').textContent
+                    ).price;
+                    input.value = originalPrice.toFixed(2);
+                });
+                
+                updateSummary();
+            }
+        });
+        
+        // Save proposal button (using localStorage)
+        document.getElementById('save-proposal').addEventListener('click', () => {
+            const proposalData = {
+                clientName: document.getElementById('client-name').value,
+                date: document.getElementById('proposal-date').value,
+                studentCount: document.getElementById('student-count').value,
+                grandTotal: document.getElementById('grand-total').textContent,
+                components: []
+            };
+            
+            // Get all component values
+            document.querySelectorAll('#components-body tr:not(.category-header)').forEach(row => {
+                proposalData.components.push({
+                    item: row.querySelector('td:nth-child(2)').textContent,
+                    quantity: row.querySelector('.quantity').value,
+                    unitPrice: row.querySelector('.unit-price').value,
+                    total: row.querySelector('.item-total').textContent
+                });
+            });
+            
+            localStorage.setItem('lastProposal', JSON.stringify(proposalData));
+            alert('Proposal saved to browser storage!');
+        });
+        
+        // Generate report button
+        document.getElementById('generate-report').addEventListener('click', () => {
+            const clientName = document.getElementById('client-name').value || 'Unnamed Client';
+            const studentCount = document.getElementById('student-count').value || '1';
+            const grandTotal = document.getElementById('grand-total').textContent;
+            const costPerStudent = document.getElementById('cost-per-student').textContent;
+            
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(`
+                <html>
+                <head>
+                    <title>Proposal for ${clientName}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .header { background-color: #0056A6; color: white; padding: 20px; text-align: center; }
+                        h1 { color: #0056A6; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #0056A6; color: white; }
+                        .total { font-weight: bold; }
+                        .summary { background-color: #F5F5F5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Charlton Brown</h1>
+                        <h2>Education Specialists</h2>
+                    </div>
+                    
+                    <h1>Proposal for ${clientName}</h1>
+                    <p>Date: ${new Date().toLocaleDateString()}</p>
+                    <p>Number of Students: ${studentCount}</p>
+                    
+                    <div class="summary">
+                        <h2>Cost Summary</h2>
+                        <p><strong>Total Project Cost:</strong> AUD ${grandTotal}</p>
+                        <p><strong>Cost per Student:</strong> AUD ${costPerStudent}</p>
+                    </div>
+                    
+                    <h2>Detailed Components</h2>
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+            `);
+            
+            // Add all components with non-zero quantities
+            document.querySelectorAll('#components-body tr:not(.category-header)').forEach(row => {
+                const quantity = row.querySelector('.quantity').value;
+                if (parseFloat(quantity) > 0) {
+                    reportWindow.document.write(`
+                        <tr>
+                            <td>${row.querySelector('td:nth-child(2)').textContent}</td>
+                            <td>${quantity} ${row.querySelector('td:nth-child(4)').textContent}</td>
+                            <td>AUD ${row.querySelector('.unit-price').value}</td>
+                            <td>AUD ${row.querySelector('.item-total').textContent}</td>
+                        </tr>
+                    `);
+                }
+            });
+            
+            reportWindow.document.write(`
+                        <tr class="total">
+                            <td colspan="3">Grand Total</td>
+                            <td>AUD ${grandTotal}</td>
+                        </tr>
+                    </table>
+                    <p>Proposal valid until: ${document.getElementById('expiry-date').value || 'Not specified'}</p>
+                    <p>Prepared by: ${document.getElementById('client-signature').value || 'Not specified'}</p>
+                </body>
+                </html>
+            `);
+            reportWindow.document.close();
+        });
+        
+        // Initialize with current date
+        const today = new Date();
+        document.getElementById('proposal-date').valueAsDate = today;
+        
+        // Set expiry date to 30 days from now
+        const expiryDate = new Date();
+        expiryDate.setDate(today.getDate() + 30);
+        document.getElementById('expiry-date').valueAsDate = expiryDate;
+        
+        // Display formatted date in header
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('proposal-date-display').textContent = today.toLocaleDateString('en-AU', options);
+    </script>
+</body>
+</html>
