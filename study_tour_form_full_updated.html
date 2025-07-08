@@ -179,6 +179,26 @@
       sel.innerHTML = '<option>Select item</option>' + items.map(i => `<option>${i}</option>`).join('');
     });
     tr.querySelector('.item').addEventListener('change', function() {
+  const price = defaultPrices[this.value] || 0;
+  tr.querySelector('.unit').value = price;
+  updateRowTotal(tr);
+  calculateTotal();
+  // Detect "Other Activities" and replace with input
+  if (this.value === "Other Activities") {
+    const td = this.parentElement;
+    // Replace select with input
+    const input = document.createElement('input');
+    input.type = "text";
+    input.value = "Other Activities";
+    input.className = "custom-activity";
+    input.oninput = function() {
+      // If you want to update export or calculations based on this, add logic here
+    };
+    td.innerHTML = "";
+    td.appendChild(input);
+  }
+});
+    tr.querySelector('.item').addEventListener('change', function() {
       const price = defaultPrices[this.value] || 0;
       tr.querySelector('.unit').value = price;
       updateRowTotal(tr);
