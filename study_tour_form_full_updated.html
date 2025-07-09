@@ -275,23 +275,41 @@
   document.getElementById('finalTotal').textContent = `$${finalTotal.toFixed(2)}`;
   document.getElementById('pricePerStudent').textContent = `$${(finalTotal/num).toFixed(2)}`;
 }
-
 function exportTable() {
-  const hdrs = Array.from(document.querySelectorAll('#costTable th')).map(th=>th.textContent);
-  let csv = hdrs.join(',')+'\n';
-  document.querySelectorAll('#costItems tr').forEach(tr=>{
-    const cols = Array.from(tr.querySelectorAll('td')).slice(0,6).map(td=>{
-      const input = td.querySelector('input,select');
-      return input ? input.value : td.textContent;
-    });
-    csv+=cols.join(',')+'\n';
+  // Header: Item, Total
+  let csv = 'Item,Total $' + '\n';
+  document.querySelectorAll('#costItems tr').forEach(tr => {
+    // Get the item name
+    let itemCell = tr.querySelector('.item');
+    let itemVal = '';
+    if (itemCell) {
+      // If it's a select
+      if (itemCell.tagName === 'SELECT') {
+        itemVal = itemCell.value || itemCell.options[itemCell.selectedIndex].text;
+      } else if (itemCell.tagName === 'INPUT') {
+        itemVal = itemCell.value;
+      } else {
+        itemVal = itemCell.textContent;
+      }
+    } else {
+      // Fallback: second cell text
+      itemVal = tr.cells[1].textContent.trim();
+    }
+    // Get total for this row
+    let totalVal = tr.querySelector('.total') ? tr.querySelector('.total').textContent : '';
+    if(itemVal && totalVal) {
+      csv += `"${itemVal.replace(/"/g, '""')}",${totalVal}\n`;
+    }
   });
-  // Append summary rows
+  // Add final total at the end
   const finalTotal = document.getElementById('finalTotal').textContent;
-  const pricePerStudent = document.getElementById('pricePerStudent').textContent;
-  csv += `Final Total,${finalTotal}\nPrice per Student,${pricePerStudent}\n`;
-  const blob = new Blob([csv],{type:'text/csv'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='costs.csv';a.click();
+  csv += `Final Total,${finalTotal}\n`;
+  // Download CSV
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'cost_summary.csv';
+  a.click();
 }
 </script>
