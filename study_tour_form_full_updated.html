@@ -5,7 +5,7 @@
   <title>Study Tour Calculator</title>
   <style>
     @media print {
-      input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn { display: none; }
+      input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn, #exportProposalBtn { display: none; }
     }
     .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
     .form-row > div { flex: 1; }
@@ -14,23 +14,10 @@
     table th { background: #4b006e; color: #fff; }
     .summary { margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
     .summary .line { display: flex; gap: 10px; }
-    .summary .label { width: 120px; font-weight: bold; text-align: right; }
-    .summary .value { width: 100px; text-align: right; }
-    .remove-btn { background: #e74c3c; color: #fff; border: none; cursor: pointer; padding: 4px 8px; }
   </style>
 </head>
 <body>
-<h2 style="color:#4b006e;">STUDY TOUR INFO</h2>
 <div class="form-row">
-  <div>
-    <label>Student Group<br><input id="studentGroup" placeholder="e.g. Year 9 (13-14yrs)"/></label>
-  </div>
-  <div>
-    <label>Number of Students<br><input id="numStudents" type="number" placeholder="e.g. 40" min="1"/></label>
-  </div>
-  <div>
-    <label>Date<br><input id="startDate" type="date"/></label>
-  </div>
   <div>
     <label>Weeks<br><input id="weeks" type="number" placeholder="e.g. 1" min="1"/></label>
   </div>
@@ -95,7 +82,8 @@
 <div style="margin-top:20px;">
   <button class="add-row-btn" onclick="addRow()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;">+ Add Cost Item</button>
   <button id="calcBtn" onclick="calculateTotal()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;margin-left:10px;">Calculate</button>
-  <button id="exportBtn" onclick="exportTable()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;margin-left:10px;">Export Table</button>
+  <button id="exportBtn" onclick="exportTable()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;margin-left:10px;">Export Table (Internal)</button>
+  <button id="exportProposalBtn" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;margin-left:10px;">Export Table for Proposal</button>
 </div>
 
 <div class="form-row" style="margin-top:20px;">
@@ -120,155 +108,28 @@
     tr.querySelector('.total').textContent = `$${(qty*unit).toFixed(2)}`;
     calculateTotal();
   }
-  const dataset = {
-    "Labour": [
-      "Trainer Cost - Business Days", "Trainer Cost - Weekend (20% Levy)", "Administrative Cost - Business Days", "Administrative Cost - Weekend (20% Levy)", "Media Team Cost – Business Days"
-    ],
-    "Learning Materials": [
-      "Child Care (Equipment Usage)", "Cookery (Cooking Materials)", "ELICOS (Printing Material)", "First Aid"
-    ],
-    "Course-Related Direct Costs": [
-      "Cookery - Commercial Cookery Kitchen"
-    ],
-    "Accommodation": [
-      "Homestay Twin", "Full Year 2025 Studio", "Semester One 2025 Studio", "Semester Two 2025 Studio", "Short Stay Studio", "Escort Placement Fee"
-    ],
-    "Application Fee": ["Application Fee"],
-    "Activity": [
-      "University Campus Tour - Half Day (15-20)", "University Campus Tour - Half Day (21-30)", "University Campus Tour - Half Day (31-39)", "University Campus Tour - Half Day (40+)",
-      "University Campus Tour - Full Day (15-20)", "University Campus Tour - Full Day (21-30)", "University Campus Tour - Full Day (31-39)", "University Campus Tour - Full Day (40+)",
-      "University Campus Tour + Science Lab Visit - Half Day (15-20)", "University Campus Tour + Science Lab Visit - Half Day (21-30)", "University Campus Tour + Science Lab Visit - Half Day (31-39)",
-      "University Campus Tour + Science Lab Visit - Full Day (15-20)", "University Campus Tour + Science Lab Visit - Full Day (21-30)", "University Campus Tour + Science Lab Visit - Full Day (31-39)",
-      "Day Tour in Brisbane", "High School Visit", "Day Tour to Gold Coast with Theme Park Visit", "Aviation Class", "Other Activities"
-    ],
-    "Transport": [
-      "BNE Airport to City, or return - Single Pax","BNE Airport to City, or return - 10 seat mini bus","BNE Airport to City, or return - 21/24 seat mini bus","BNE Airport to City, or return - 39 seat midi coach","BNE Airport to City, or return - 57 seat coach","BNE Airport to City, or return - 61 seat coach",
-      "8hr Tour Local - 10 seat mini bus","8hr Tour Local - 21/24 seat mini bus","8hr Tour Local - 39 seat midi coach","8hr Tour Local - 57 seat coach","8hr Tour Local - 61 seat coach",
-      "8hr Tour Over 100km - 10 seat mini bus","8hr Tour Over 100km - 21/24 seat mini bus","8hr Tour Over 100km - 39 seat midi coach","8hr Tour Over 100km - 57 seat coach","8hr Tour Over 100km - 61 seat coach",
-      "Theme Park Transfers - 10 seat mini bus","Theme Park Transfers - 21/24 seat mini bus","Theme Park Transfers - 39 seat midi coach","Theme Park Transfers - 57 seat coach","Theme Park Transfers - 61 seat coach",
-      "Australia Zoo - 10 seat mini bus","Australia Zoo - 21/24 seat mini bus","Australia Zoo - 39 seat midi coach","Australia Zoo - 57 seat coach","Australia Zoo - 61 seat coach",
-      "Stradbroke Island Day Tour - 10 seat mini bus","Stradbroke Island Day Tour - 21/24 seat mini bus","Stradbroke Island Day Tour - 39 seat midi coach","Stradbroke Island Day Tour - 57 seat coach","Stradbroke Island Day Tour - 61 seat coach"
-    ]
-  };
-
-  const defaultPrices = {
-    "Application Fee": 250,
-    "Escort Placement Fee": 380,
-    "Homestay Twin": 400,
-    "Full Year 2025 Studio": 299,
-    "Semester One 2025 Studio": 329,
-    "Semester Two 2025 Studio": 329,
-    "Short Stay Studio": 359,
-    "BNE Airport to City, or return - Single Pax": 132,
-    "BNE Airport to City, or return - 10 seat mini bus": 220,
-    "BNE Airport to City, or return - 21/24 seat mini bus": 297,
-    "BNE Airport to City, or return - 39 seat midi coach": 341,
-    "BNE Airport to City, or return - 57 seat coach": 385,
-    "BNE Airport to City, or return - 61 seat coach": 407,
-    "8hr Tour Local - 10 seat mini bus": 850,
-    "8hr Tour Local - 21/24 seat mini bus": 990,
-    "8hr Tour Local - 39 seat midi coach": 1100,
-    "8hr Tour Local - 57 seat coach": 1210,
-    "8hr Tour Local - 61 seat coach": 1250,
-    "8hr Tour Over 100km - 10 seat mini bus": 880,
-    "8hr Tour Over 100km - 21/24 seat mini bus": 1100,
-    "8hr Tour Over 100km - 39 seat midi coach": 1210,
-    "8hr Tour Over 100km - 57 seat coach": 1320,
-    "8hr Tour Over 100km - 61 seat coach": 1430,
-    "Theme Park Transfers - 10 seat mini bus": 638,
-    "Theme Park Transfers - 21/24 seat mini bus": 770,
-    "Theme Park Transfers - 39 seat midi coach": 880,
-    "Theme Park Transfers - 57 seat coach": 990,
-    "Theme Park Transfers - 61 seat coach": 1100,
-    "Australia Zoo - 10 seat mini bus": 880,
-    "Australia Zoo - 21/24 seat mini bus": 1100,
-    "Australia Zoo - 39 seat midi coach": 1210,
-    "Australia Zoo - 57 seat coach": 1320,
-    "Australia Zoo - 61 seat coach": 1430,
-    "Stradbroke Island Day Tour - 10 seat mini bus": 1320,
-    "Stradbroke Island Day Tour - 21/24 seat mini bus": 1540,
-    "Stradbroke Island Day Tour - 39 seat midi coach": 1650,
-    "Stradbroke Island Day Tour - 57 seat coach": 1760,
-    "Stradbroke Island Day Tour - 61 seat coach": 1870,
-    // Activity tiered rates
-    "University Campus Tour - Half Day (15-20)": 123,
-    "University Campus Tour - Half Day (21-30)": 116,
-    "University Campus Tour - Half Day (31-39)": 110,
-    "University Campus Tour - Half Day (40+)": 104,
-    "University Campus Tour - Full Day (15-20)": 180,
-    "University Campus Tour - Full Day (21-30)": 171,
-    "University Campus Tour - Full Day (31-39)": 162,
-    "University Campus Tour - Full Day (40+)": 168,
-    "University Campus Tour + Science Lab Visit - Half Day (15-20)": 123,
-    "University Campus Tour + Science Lab Visit - Half Day (21-30)": 116,
-    "University Campus Tour + Science Lab Visit - Half Day (31-39)": 110,
-    "University Campus Tour + Science Lab Visit - Half Day (40+)": 104,
-    "University Campus Tour + Science Lab Visit - Full Day (15-20)": 180,
-    "University Campus Tour + Science Lab Visit - Full Day (21-30)": 171,
-    "University Campus Tour + Science Lab Visit - Full Day (31-39)": 162,
-    "University Campus Tour + Science Lab Visit - Full Day (40+)": 168,
-    "Day Tour in Brisbane": 0,
-    "High School Visit": 0,
-    "Day Tour to Gold Coast with Theme Park Visit": 0,
-    "Aviation Class": 0,
-    "Other Activities": 0
-  };
 
   function addRow() {
     const tbody = document.getElementById('costItems');
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><select class="category"><option value="">Select category</option>${Object.keys(dataset).map(c => `<option>${c}</option>`).join('')}</select></td>
-      <td><select class="item"><option value="">Select item</option></select></td>
+      <td><input type="text" value="" placeholder="Category" /></td>
+      <td><input type="text" value="" placeholder="Item" /></td>
       <td><input type="number" class="qty" value="1" min="1"/></td>
       <td><input type="number" class="unit" value="0"/></td>
       <td class="total">$0.00</td>
-      <td><button class="remove-btn" onclick="this.closest('tr').remove(); calculateTotal();">x</button></td>
+      <td><input type="text" class="notes" placeholder="Optional info"/></td>
+      <td><button type="button" onclick="this.closest('tr').remove();calculateTotal();" class="remove-btn">Remove</button></td>
     `;
-    // Always insert after the 2nd fixed row
-    const fixedRows = tbody.querySelectorAll('.fixed-row');
-    if (fixedRows.length >= 2) {
-      tbody.insertBefore(tr, fixedRows[1].nextSibling);
-    } else {
-      tbody.appendChild(tr); // fallback, if fixed rows are missing
-    }
-    tr.querySelector('.category').addEventListener('change', function() {
-      const items = dataset[this.value] || [];
-      const sel = tr.querySelector('.item');
-      sel.innerHTML = '<option>Select item</option>' + items.map(i => `<option>${i}</option>`).join('');
-    });
-    tr.querySelector('.item').addEventListener('change', function() {
-      const price = defaultPrices[this.value] || 0;
-      tr.querySelector('.unit').value = price;
-      updateRowTotal(tr);
-      calculateTotal();
-      // Detect "Other Activities" and replace with input
-      if (this.value === "Other Activities") {
-        const td = this.parentElement;
-        // Replace select with input
-        const input = document.createElement('input');
-        input.type = "text";
-        input.value = "Other Activities";
-        input.className = "custom-activity";
-        input.oninput = function() {
-          // If you want to update export or calculations based on this, add logic here
-        };
-        td.innerHTML = "";
-        td.appendChild(input);
-      }
-    });
-    tr.querySelector('.item').addEventListener('change', function() {
-      const price = defaultPrices[this.value] || 0;
-      tr.querySelector('.unit').value = price;
+    tr.querySelector('.qty').addEventListener('input', function() {
       updateRowTotal(tr);
       calculateTotal();
     });
-    ['qty','unit'].forEach(cls => {
-      tr.querySelector(`.${cls}`).addEventListener('input', () => {
-        updateRowTotal(tr);
-        calculateTotal();
-      });
+    tr.querySelector('.unit').addEventListener('input', function() {
+      updateRowTotal(tr);
+      calculateTotal();
     });
+    tbody.appendChild(tr);
   }
 
   function updateRowTotal(tr) {
@@ -280,46 +141,38 @@
   function calculateTotal() {
     let base = 0;
     let baseForProfit = 0;
-
-    // Grab all rows
     document.querySelectorAll('#costItems tr').forEach((tr, idx) => {
       const totalCell = tr.querySelector('.total');
       if (!totalCell) return;
       const rowTotal = parseFloat(totalCell.textContent.replace('$','')) || 0;
-
       base += rowTotal;
-
-      // Exclude Application Fee from profit calculation
-      // Assuming Application Fee is always first row (idx === 0)
-      if (idx !== 0) {
+      if (idx !== 0) { // Exclude Application Fee from profit
         baseForProfit += rowTotal;
       }
     });
-
     const profitPct = parseFloat(document.getElementById('profitMargin').value) || 0;
     const profit = baseForProfit * profitPct / 100;
     const finalTotal = base + profit;
-    const num = parseInt(document.getElementById('numStudents').value) || 1;
+    const num = parseInt(document.getElementById('numStudents')?.value) || 1;
     document.getElementById('baseTotal').textContent = `$${base.toFixed(2)}`;
     document.getElementById('profitAmt').textContent = `$${profit.toFixed(2)}`;
     document.getElementById('finalTotal').textContent = `$${finalTotal.toFixed(2)}`;
     document.getElementById('pricePerStudent').textContent = `$${(finalTotal/num).toFixed(2)}`;
   }
+
+  // Internal Export: Full Table with all calculations
   function exportTable() {
     // Header: Item, Total
     let csv = 'Item,Total $\n';
     document.querySelectorAll('#costItems tr').forEach(tr => {
       // Get the item/component name
       let itemVal = '';
-      // For fixed rows, the item is in the second cell as a <select> or plain text
       let itemCell = tr.cells[1];
       if (itemCell) {
-        // If select exists
         const sel = itemCell.querySelector('select');
         if (sel) {
           itemVal = sel.value || sel.options[sel.selectedIndex].text;
         } else if (itemCell.querySelector('input')) {
-          // For editable "Other Activities" or similar
           itemVal = itemCell.querySelector('input').value;
         } else {
           itemVal = itemCell.textContent.trim();
@@ -342,6 +195,40 @@
     a.download = 'cost_summary.csv';
     a.click();
   }
+
+  // Proposal Export: Only Item, Total, and Final Price (no profit/cost per student)
+  function exportProposalTable() {
+    let csv = 'Item,Total $\n';
+    document.querySelectorAll('#costItems tr').forEach(tr => {
+      let itemVal = '';
+      let itemCell = tr.cells[1];
+      if (itemCell) {
+        const sel = itemCell.querySelector('select');
+        if (sel) {
+          itemVal = sel.value || sel.options[sel.selectedIndex].text;
+        } else if (itemCell.querySelector('input')) {
+          itemVal = itemCell.querySelector('input').value;
+        } else {
+          itemVal = itemCell.textContent.trim();
+        }
+      }
+      let totalVal = tr.querySelector('.total') ? tr.querySelector('.total').textContent : '';
+      if (itemVal && totalVal) {
+        csv += `"${itemVal.replace(/"/g, '""')}",${totalVal}\n`;
+      }
+    });
+    // Only add "Final Price" (no profit/cost per student breakdown)
+    const finalTotal = document.getElementById('finalTotal').textContent;
+    csv += `Final Price,${finalTotal}\n`;
+    // Download CSV
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'proposal_cost_summary.csv';
+    a.click();
+  }
+  document.getElementById('exportProposalBtn').onclick = exportProposalTable;
 </script>
 </body>
 </html>
