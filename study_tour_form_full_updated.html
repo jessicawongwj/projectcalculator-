@@ -277,27 +277,27 @@
 }
 function exportTable() {
   // Header: Item, Total
-  let csv = 'Item,Total $' + '\n';
+  let csv = 'Item,Total $\n';
   document.querySelectorAll('#costItems tr').forEach(tr => {
-    // Get the item name
-    let itemCell = tr.querySelector('.item');
+    // Get the item/component name
     let itemVal = '';
+    // For fixed rows, the item is in the second cell as a <select> or plain text
+    let itemCell = tr.cells[1];
     if (itemCell) {
-      // If it's a select
-      if (itemCell.tagName === 'SELECT') {
-        itemVal = itemCell.value || itemCell.options[itemCell.selectedIndex].text;
-      } else if (itemCell.tagName === 'INPUT') {
-        itemVal = itemCell.value;
+      // If select exists
+      const sel = itemCell.querySelector('select');
+      if (sel) {
+        itemVal = sel.value || sel.options[sel.selectedIndex].text;
+      } else if (itemCell.querySelector('input')) {
+        // For editable "Other Activities" or similar
+        itemVal = itemCell.querySelector('input').value;
       } else {
-        itemVal = itemCell.textContent;
+        itemVal = itemCell.textContent.trim();
       }
-    } else {
-      // Fallback: second cell text
-      itemVal = tr.cells[1].textContent.trim();
     }
-    // Get total for this row
+    // Get the total for this row
     let totalVal = tr.querySelector('.total') ? tr.querySelector('.total').textContent : '';
-    if(itemVal && totalVal) {
+    if (itemVal && totalVal) {
       csv += `"${itemVal.replace(/"/g, '""')}",${totalVal}\n`;
     }
   });
