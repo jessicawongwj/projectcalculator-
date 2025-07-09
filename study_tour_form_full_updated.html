@@ -1,20 +1,25 @@
-<style>
-  /* Print styles */
-  @media print {
-    input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn { display: none; }
-  }
-  .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
-  .form-row > div { flex: 1; }
-  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-  table th, table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-  table th { background: #4b006e; color: #fff; }
-  .summary { margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-  .summary .line { display: flex; gap: 10px; }
-  .summary .label { width: 120px; font-weight: bold; text-align: right; }
-  .summary .value { width: 100px; text-align: right; }
-  .remove-btn { background: #e74c3c; color: #fff; border: none; cursor: pointer; padding: 4px 8px; }
-</style>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Tour Calculator</title>
+  <style>
+    @media print {
+      input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn { display: none; }
+    }
+    .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .form-row > div { flex: 1; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table th, table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    table th { background: #4b006e; color: #fff; }
+    .summary { margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .summary .line { display: flex; gap: 10px; }
+    .summary .label { width: 120px; font-weight: bold; text-align: right; }
+    .summary .value { width: 100px; text-align: right; }
+    .remove-btn { background: #e74c3c; color: #fff; border: none; cursor: pointer; padding: 4px 8px; }
+  </style>
+</head>
+<body>
 <h2 style="color:#4b006e;">STUDY TOUR INFO</h2>
 <div class="form-row">
   <div>
@@ -49,45 +54,47 @@
       <th></th>
     </tr>
   </thead>
-  <tbody id="costItems"></tbody>
-  <tr class="fixed-row">
-  <td>
-    <select disabled>
-      <option selected>Application Fee</option>
-    </select>
-  </td>
-  <td>
-    <select disabled>
-      <option selected>Application Fee</option>
-    </select>
-  </td>
-  <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
-  <td><input type="number" class="unit" value="250" onchange="updateFixedRowTotal(this)"/></td>
-  <td class="total">$250.00</td>
-  <td><input type="text" class="notes" placeholder="Optional info"/></td>
-  <td></td>
-</tr>
-<tr class="fixed-row">
-  <td>
-    <select disabled>
-      <option selected>Labour</option>
-    </select>
-  </td>
-  <td>
-    <select class="item">
-      <option>Trainer Cost - Business Days</option>
-      <option>Trainer Cost - Weekend (20% Levy)</option>
-      <option>Administrative Cost - Business Days</option>
-      <option>Administrative Cost - Weekend (20% Levy)</option>
-      <option>Media Team Cost – Business Days</option>
-    </select>
-  </td>
-  <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
-  <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
-  <td class="total">$0.00</td>
-  <td><input type="text" class="notes" placeholder="Optional info"/></td>
-  <td></td>
-</tr></table>
+  <tbody id="costItems">
+    <tr class="fixed-row">
+      <td>
+        <select disabled>
+          <option selected>Application Fee</option>
+        </select>
+      </td>
+      <td>
+        <select disabled>
+          <option selected>Application Fee</option>
+        </select>
+      </td>
+      <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
+      <td><input type="number" class="unit" value="250" onchange="updateFixedRowTotal(this)"/></td>
+      <td class="total">$250.00</td>
+      <td><input type="text" class="notes" placeholder="Optional info"/></td>
+      <td></td>
+    </tr>
+    <tr class="fixed-row">
+      <td>
+        <select disabled>
+          <option selected>Labour</option>
+        </select>
+      </td>
+      <td>
+        <select class="item">
+          <option>Trainer Cost - Business Days</option>
+          <option>Trainer Cost - Weekend (20% Levy)</option>
+          <option>Administrative Cost - Business Days</option>
+          <option>Administrative Cost - Weekend (20% Levy)</option>
+          <option>Media Team Cost – Business Days</option>
+        </select>
+      </td>
+      <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
+      <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
+      <td class="total">$0.00</td>
+      <td><input type="text" class="notes" placeholder="Optional info"/></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 
 <div class="form-row" style="margin-top:20px;">
   <div style="flex:2;"></div>
@@ -105,12 +112,13 @@
 
 <script>
   function updateFixedRowTotal(input) {
-  const tr = input.closest('tr');
-  const qty = parseFloat(tr.querySelector('.qty').value) || 0;
-  const unit = parseFloat(tr.querySelector('.unit').value) || 0;
-  tr.querySelector('.total').textContent = `$${(qty*unit).toFixed(2)}`;
-  calculateTotal();
-}  const dataset = {
+    const tr = input.closest('tr');
+    const qty = parseFloat(tr.querySelector('.qty').value) || 0;
+    const unit = parseFloat(tr.querySelector('.unit').value) || 0;
+    tr.querySelector('.total').textContent = `$${(qty*unit).toFixed(2)}`;
+    calculateTotal();
+  }
+  const dataset = {
     "Labour": [
       "Trainer Cost - Business Days", "Trainer Cost - Weekend (20% Levy)", "Administrative Cost - Business Days", "Administrative Cost - Weekend (20% Levy)", "Media Team Cost – Business Days"
     ],
@@ -127,8 +135,8 @@
     "Activity": [
       "University Campus Tour - Half Day (15-20)", "University Campus Tour - Half Day (21-30)", "University Campus Tour - Half Day (31-39)", "University Campus Tour - Half Day (40+)",
       "University Campus Tour - Full Day (15-20)", "University Campus Tour - Full Day (21-30)", "University Campus Tour - Full Day (31-39)", "University Campus Tour - Full Day (40+)",
-      "University Campus Tour + Science Lab Visit - Half Day (15-20)", "University Campus Tour + Science Lab Visit - Half Day (21-30)", "University Campus Tour + Science Lab Visit - Half Day (31-39)", "University Campus Tour + Science Lab Visit - Half Day (40+)",
-      "University Campus Tour + Science Lab Visit - Full Day (15-20)", "University Campus Tour + Science Lab Visit - Full Day (21-30)", "University Campus Tour + Science Lab Visit - Full Day (31-39)", "University Campus Tour + Science Lab Visit - Full Day (40+)",
+      "University Campus Tour + Science Lab Visit - Half Day (15-20)", "University Campus Tour + Science Lab Visit - Half Day (21-30)", "University Campus Tour + Science Lab Visit - Half Day (31-39)",
+      "University Campus Tour + Science Lab Visit - Full Day (15-20)", "University Campus Tour + Science Lab Visit - Full Day (21-30)", "University Campus Tour + Science Lab Visit - Full Day (31-39)",
       "Day Tour in Brisbane", "High School Visit", "Day Tour to Gold Coast with Theme Park Visit", "Aviation Class", "Other Activities"
     ],
     "Transport": [
@@ -216,37 +224,37 @@
       <td><button class="remove-btn" onclick="this.closest('tr').remove(); calculateTotal();">x</button></td>
     `;
     // Always insert after the 2nd fixed row
-const fixedRows = tbody.querySelectorAll('.fixed-row');
-if (fixedRows.length >= 2) {
-  tbody.insertBefore(tr, fixedRows[1].nextSibling);
-} else {
-  tbody.appendChild(tr); // fallback, if fixed rows are missing
-};
+    const fixedRows = tbody.querySelectorAll('.fixed-row');
+    if (fixedRows.length >= 2) {
+      tbody.insertBefore(tr, fixedRows[1].nextSibling);
+    } else {
+      tbody.appendChild(tr); // fallback, if fixed rows are missing
+    }
     tr.querySelector('.category').addEventListener('change', function() {
       const items = dataset[this.value] || [];
       const sel = tr.querySelector('.item');
       sel.innerHTML = '<option>Select item</option>' + items.map(i => `<option>${i}</option>`).join('');
     });
     tr.querySelector('.item').addEventListener('change', function() {
-  const price = defaultPrices[this.value] || 0;
-  tr.querySelector('.unit').value = price;
-  updateRowTotal(tr);
-  calculateTotal();
-  // Detect "Other Activities" and replace with input
-  if (this.value === "Other Activities") {
-    const td = this.parentElement;
-    // Replace select with input
-    const input = document.createElement('input');
-    input.type = "text";
-    input.value = "Other Activities";
-    input.className = "custom-activity";
-    input.oninput = function() {
-      // If you want to update export or calculations based on this, add logic here
-    };
-    td.innerHTML = "";
-    td.appendChild(input);
-  }
-});
+      const price = defaultPrices[this.value] || 0;
+      tr.querySelector('.unit').value = price;
+      updateRowTotal(tr);
+      calculateTotal();
+      // Detect "Other Activities" and replace with input
+      if (this.value === "Other Activities") {
+        const td = this.parentElement;
+        // Replace select with input
+        const input = document.createElement('input');
+        input.type = "text";
+        input.value = "Other Activities";
+        input.className = "custom-activity";
+        input.oninput = function() {
+          // If you want to update export or calculations based on this, add logic here
+        };
+        td.innerHTML = "";
+        td.appendChild(input);
+      }
+    });
     tr.querySelector('.item').addEventListener('change', function() {
       const price = defaultPrices[this.value] || 0;
       tr.querySelector('.unit').value = price;
@@ -268,68 +276,70 @@ if (fixedRows.length >= 2) {
   }
 
   function calculateTotal() {
-  let base = 0;
-  let baseForProfit = 0;
+    let base = 0;
+    let baseForProfit = 0;
 
-  // Grab all rows
-  document.querySelectorAll('#costItems tr').forEach((tr, idx) => {
-    const totalCell = tr.querySelector('.total');
-    if (!totalCell) return;
-    const rowTotal = parseFloat(totalCell.textContent.replace('$','')) || 0;
+    // Grab all rows
+    document.querySelectorAll('#costItems tr').forEach((tr, idx) => {
+      const totalCell = tr.querySelector('.total');
+      if (!totalCell) return;
+      const rowTotal = parseFloat(totalCell.textContent.replace('$','')) || 0;
 
-    base += rowTotal;
+      base += rowTotal;
 
-    // Exclude Application Fee from profit calculation
-    // Assuming Application Fee is always first row (idx === 0)
-    if (idx !== 0) {
-      baseForProfit += rowTotal;
-    }
-  });
-
-  const profitPct = parseFloat(document.getElementById('profitMargin').value) || 0;
-  const profit = baseForProfit * profitPct / 100;
-  const finalTotal = base + profit;
-  const num = parseInt(document.getElementById('numStudents').value) || 1;
-  document.getElementById('baseTotal').textContent = `$${base.toFixed(2)}`;
-  document.getElementById('profitAmt').textContent = `$${profit.toFixed(2)}`;
-  document.getElementById('finalTotal').textContent = `$${finalTotal.toFixed(2)}`;
-  document.getElementById('pricePerStudent').textContent = `$${(finalTotal/num).toFixed(2)}`;
-}
-function exportTable() {
-  // Header: Item, Total
-  let csv = 'Item,Total $\n';
-  document.querySelectorAll('#costItems tr').forEach(tr => {
-    // Get the item/component name
-    let itemVal = '';
-    // For fixed rows, the item is in the second cell as a <select> or plain text
-    let itemCell = tr.cells[1];
-    if (itemCell) {
-      // If select exists
-      const sel = itemCell.querySelector('select');
-      if (sel) {
-        itemVal = sel.value || sel.options[sel.selectedIndex].text;
-      } else if (itemCell.querySelector('input')) {
-        // For editable "Other Activities" or similar
-        itemVal = itemCell.querySelector('input').value;
-      } else {
-        itemVal = itemCell.textContent.trim();
+      // Exclude Application Fee from profit calculation
+      // Assuming Application Fee is always first row (idx === 0)
+      if (idx !== 0) {
+        baseForProfit += rowTotal;
       }
-    }
-    // Get the total for this row
-    let totalVal = tr.querySelector('.total') ? tr.querySelector('.total').textContent : '';
-    if (itemVal && totalVal) {
-      csv += `"${itemVal.replace(/"/g, '""')}",${totalVal}\n`;
-    }
-  });
-  // Add final total at the end
-  const finalTotal = document.getElementById('finalTotal').textContent;
-  csv += `Final Total,${finalTotal}\n`;
-  // Download CSV
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'cost_summary.csv';
-  a.click();
-}
+    });
+
+    const profitPct = parseFloat(document.getElementById('profitMargin').value) || 0;
+    const profit = baseForProfit * profitPct / 100;
+    const finalTotal = base + profit;
+    const num = parseInt(document.getElementById('numStudents').value) || 1;
+    document.getElementById('baseTotal').textContent = `$${base.toFixed(2)}`;
+    document.getElementById('profitAmt').textContent = `$${profit.toFixed(2)}`;
+    document.getElementById('finalTotal').textContent = `$${finalTotal.toFixed(2)}`;
+    document.getElementById('pricePerStudent').textContent = `$${(finalTotal/num).toFixed(2)}`;
+  }
+  function exportTable() {
+    // Header: Item, Total
+    let csv = 'Item,Total $\n';
+    document.querySelectorAll('#costItems tr').forEach(tr => {
+      // Get the item/component name
+      let itemVal = '';
+      // For fixed rows, the item is in the second cell as a <select> or plain text
+      let itemCell = tr.cells[1];
+      if (itemCell) {
+        // If select exists
+        const sel = itemCell.querySelector('select');
+        if (sel) {
+          itemVal = sel.value || sel.options[sel.selectedIndex].text;
+        } else if (itemCell.querySelector('input')) {
+          // For editable "Other Activities" or similar
+          itemVal = itemCell.querySelector('input').value;
+        } else {
+          itemVal = itemCell.textContent.trim();
+        }
+      }
+      // Get the total for this row
+      let totalVal = tr.querySelector('.total') ? tr.querySelector('.total').textContent : '';
+      if (itemVal && totalVal) {
+        csv += `"${itemVal.replace(/"/g, '""')}",${totalVal}\n`;
+      }
+    });
+    // Add final total at the end
+    const finalTotal = document.getElementById('finalTotal').textContent;
+    csv += `Final Total,${finalTotal}\n`;
+    // Download CSV
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cost_summary.csv';
+    a.click();
+  }
 </script>
+</body>
+</html>
