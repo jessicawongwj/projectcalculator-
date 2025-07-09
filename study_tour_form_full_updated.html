@@ -263,11 +263,25 @@
 
   function calculateTotal() {
   let base = 0;
-  document.querySelectorAll('#costItems tr').forEach(tr => {
-    base += parseFloat(tr.querySelector('.total').textContent.replace('$','')) || 0;
+  let baseForProfit = 0;
+
+  // Grab all rows
+  document.querySelectorAll('#costItems tr').forEach((tr, idx) => {
+    const totalCell = tr.querySelector('.total');
+    if (!totalCell) return;
+    const rowTotal = parseFloat(totalCell.textContent.replace('$','')) || 0;
+
+    base += rowTotal;
+
+    // Exclude Application Fee from profit calculation
+    // Assuming Application Fee is always first row (idx === 0)
+    if (idx !== 0) {
+      baseForProfit += rowTotal;
+    }
   });
+
   const profitPct = parseFloat(document.getElementById('profitMargin').value) || 0;
-  const profit = base * profitPct/100;
+  const profit = baseForProfit * profitPct / 100;
   const finalTotal = base + profit;
   const num = parseInt(document.getElementById('numStudents').value) || 1;
   document.getElementById('baseTotal').textContent = `$${base.toFixed(2)}`;
