@@ -215,7 +215,13 @@
       <td class="total">$0.00</td>
       <td><button class="remove-btn" onclick="this.closest('tr').remove(); calculateTotal();">x</button></td>
     `;
-    tbody.appendChild(tr);
+    // Always insert after the 2nd fixed row
+const fixedRows = tbody.querySelectorAll('.fixed-row');
+if (fixedRows.length >= 2) {
+  tbody.insertBefore(tr, fixedRows[1].nextSibling);
+} else {
+  tbody.appendChild(tr); // fallback, if fixed rows are missing
+};
     tr.querySelector('.category').addEventListener('change', function() {
       const items = dataset[this.value] || [];
       const sel = tr.querySelector('.item');
