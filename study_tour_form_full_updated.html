@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+ <meta charset="UTF-8">
  <style>
 body {
   background: #fff;
@@ -19,8 +20,8 @@ body {
 h2 {
   color: #4b006e;
   margin-bottom: 16px;
+  text-align: center;
 }
-
 label {
   display: block;
   margin-bottom: 8px;
@@ -38,7 +39,7 @@ textarea {
   border: 1px solid #ced4da;
   border-radius: 7px;
   font-size: 15px;
-  background: #f8f8fd;
+  background: #fff;
   transition: border 0.2s;
 }
 
@@ -70,124 +71,190 @@ input[type="submit"]:hover, button:hover {
     @media print {
       input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn { display: none; }
     }
-    .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
-    .form-row > div { flex: 1; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    table th, table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    table th { background: #4b006e; color: #fff; }
-    .summary { margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-    .summary .line { display: flex; gap: 10px; }
-    .summary .label { width: 120px; font-weight: bold; text-align: right; }
-    .summary .value { width: 100px; text-align: right; }
-    .remove-btn { background: #e74c3c; color: #fff; border: none; cursor: pointer; padding: 4px 8px; }
+     .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+    .form-row > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th,
+    table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    table th {
+      background: #4b006e;
+      color: #fff;
+    }
+
+    .summary {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .summary .line {
+      display: flex;
+      gap: 10px;
+    }
+    .summary .label {
+      width: 120px;
+      font-weight: bold;
+      text-align: right;
+    }
+    .summary .value {
+      width: 100px;
+      text-align: right;
+    }
+
+    .remove-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-<div style="text-align:left;">
-  <img src="charlton-brown-logo.jpeg" alt="Charlton Brown Logo" style="display:inline-block; margin-bottom:20px; height:100px;">
-</div>
-<h2 style="color:#4b006e;">STUDY TOUR </h2>
-<div class="form-row">
-  <div>
-    <label>Student Group Name<br><input id="studentGroupName" placeholder="e.g. entity"/></label>
-  </div>
-  <div>
-    <label>Student Group<br><input id="studentGroup" placeholder="e.g. Year 9 (13-14yrs)"/></label>
-  </div>
-  <div>
-    <label>Number of Students<br><input id="numStudents" type="number" placeholder="e.g. 40" min="1"/></label>
-  </div>
-  <div>
-    <label>Date<br><input id="startDate" type="date"/></label>
-  </div>
-  <div>
-    <label>Weeks<br><input id="weeks" type="number" placeholder="e.g. 1" min="1"/></label>
-  </div>
-  <div>
-    <label>Time (hrs)<br><input id="timeRange" placeholder="e.g. 9am–3pm"/></label>
-  </div>
-</div>
+  <div class="form-container">
+    <div style="text-align:left; margin-bottom: 20px;">
+      <img src="charlton-brown-logo.jpeg" alt="Charlton Brown Logo" style="height:100px;">
+    </div>
 
-<table id="costTable">
-  <thead>
-    <tr>
-      <th>Category</th>
-      <th>Item</th>
-      <th>Qty</th>
-      <th>Unit $</th>
-      <th>Total $</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="costItems">
-    <tr class="fixed-row">
-      <td>
-        <select disabled>
-          <option selected>Application Fee</option>
-        </select>
-      </td>
-      <td>
-        <select disabled>
-          <option selected>Application Fee</option>
-        </select>
-      </td>
-      <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
-      <td><input type="number" class="unit" value="250" onchange="updateFixedRowTotal(this)"/></td>
-      <td class="total">$250.00</td>
-      <td><input type="text" class="notes" placeholder="Optional info"/></td>
-      <td></td>
-    </tr>
-    <tr class="fixed-row">
-      <td>
-        <select disabled>
-          <option selected>Labour</option>
-        </select>
-      </td>
-      <td>
-        <select class="item">
-          <option>Trainer Cost - Business Days</option>
-          <option>Trainer Cost - Weekend (20% Levy)</option>
-          <option>Administrative Cost - Business Days</option>
-          <option>Administrative Cost - Weekend (20% Levy)</option>
-          <option>Media Team Cost – Business Days</option>
-        </select>
-      </td>
-      <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
-      <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
-      <td class="total">$0.00</td>
-      <td><input type="text" class="notes" placeholder="Optional info"/></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+    <h2>STUDY TOUR</h2>
 
-<div style="margin-top:20px;">
-  <button class="add-row-btn" onclick="addRow()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;">+ Add Cost Item</button>
-  <button id="calcBtn" onclick="calculateTotal()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;margin-left:10px;">Calculate</button>
-  <button id="exportBtn" onclick="exportTable()" style="background:#4b006e;color:#fff;padding:8px;border:none;cursor:pointer;margin-left:10px;">Export Table</button>
-</div>
+    <div class="form-row">
+      <div>
+        <label>Student Group Name
+          <input id="studentGroupName" placeholder="e.g. entity"/>
+        </label>
+      </div>
+      <div>
+        <label>Student Group
+          <input id="studentGroup" placeholder="e.g. Year 9 (13-14yrs)"/>
+        </label>
+      </div>
+      <div>
+        <label>Number of Students
+          <input id="numStudents" type="number" placeholder="e.g. 40" min="1"/>
+        </label>
+      </div>
+      <div>
+        <label>Date
+          <input id="startDate" type="date"/>
+        </label>
+      </div>
+      <div>
+        <label>Weeks
+          <input id="weeks" type="number" placeholder="e.g. 1" min="1"/>
+        </label>
+      </div>
+      <div>
+        <label>Time (hrs)
+          <input id="timeRange" placeholder="e.g. 9am–3pm"/>
+        </label>
+      </div>
+    </div>
 
-<div class="form-row" style="margin-top:20px;">
-  <div style="flex:2;"></div>
-  <div style="flex:1;">
-    <label>Profit Margin (%)<br><input id="profitMargin" type="number" value="20" min="0"/></label>
+    <table id="costTable">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Unit $</th>
+          <th>Total $</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="costItems">
+        <tr class="fixed-row">
+          <td>
+            <select disabled>
+              <option selected>Application Fee</option>
+            </select>
+          </td>
+          <td>
+            <select disabled>
+              <option selected>Application Fee</option>
+            </select>
+          </td>
+          <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
+          <td><input type="number" class="unit" value="250" onchange="updateFixedRowTotal(this)"/></td>
+          <td class="total">$250.00</td>
+          <td><input type="text" class="notes" placeholder="Optional info"/></td>
+          <td></td>
+        </tr>
+        <tr class="fixed-row">
+          <td>
+            <select disabled>
+              <option selected>Labour</option>
+            </select>
+          </td>
+          <td>
+            <select class="item">
+              <option>Trainer Cost - Business Days</option>
+              <option>Trainer Cost - Weekend (20% Levy)</option>
+              <option>Administrative Cost - Business Days</option>
+              <option>Administrative Cost - Weekend (20% Levy)</option>
+              <option>Media Team Cost – Business Days</option>
+            </select>
+          </td>
+          <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
+          <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
+          <td class="total">$0.00</td>
+          <td><input type="text" class="notes" placeholder="Optional info"/></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="text-align: right; margin-top: 20px;">
+      <button class="add-row-btn" onclick="addRow()">+ Add Cost Item</button>
+      <button id="calcBtn" onclick="calculateTotal()">Calculate</button>
+      <button id="exportBtn" onclick="exportTable()">Export Table</button>
+    </div>
+
+    <div class="form-row" style="margin-top: 20px;">
+      <div></div>
+      <div>
+        <label>Profit Margin (%)
+          <input id="profitMargin" type="number" value="20" min="0"/>
+        </label>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="line"><div class="label">Base</div><div id="baseTotal" class="value">$0.00</div></div>
+      <div class="line"><div class="label">+ Profit</div><div id="profitAmt" class="value">$0.00</div></div>
+      <div class="line"><div class="label">= Final</div><div id="finalTotal" class="value">$0.00</div></div>
+      <div class="line"><div class="label">Price / Student</div><div id="pricePerStudent" class="value">$0.00</div></div>
+    </div>
   </div>
-</div>
 
-<div class="summary">
-  <div class="line"><div class="label">Base</div><div id="baseTotal" class="value">$0.00</div></div>
-  <div class="line"><div class="label">+ Profit</div><div id="profitAmt" class="value">$0.00</div></div>
-  <div class="line"><div class="label">= Final</div><div id="finalTotal" class="value">$0.00</div></div>
-  <div class="line"><div class="label">Price / Student</div><div id="pricePerStudent" class="value">$0.00</div></div>
-</div>
+  <script>
+    function updateFixedRowTotal(input) {
+      const tr = input.closest('tr');
+      const qty = parseFloat(tr.querySelector('.qty').value) || 0;
+      const unit = parseFloat(tr.querySelector('.unit').value) || 0;
+      tr.querySelector('.total').textContent = `$${(qty*unit).toFixed(2)}`;
+      calculateTotal();
 
-<script>
-  function updateFixedRowTotal(input) {
-    const tr = input.closest('tr');
-    const qty = parseFloat(tr.querySelector('.qty').value) || 0;
-    const unit = parseFloat(tr.querySelector('.unit').value) || 0;
-    tr.querySelector('.total').textContent = `$${(qty*unit).toFixed(2)}`;
-    calculateTotal();
   }
   const dataset = {
     "Labour": [
