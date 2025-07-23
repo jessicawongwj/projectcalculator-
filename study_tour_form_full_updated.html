@@ -4,6 +4,32 @@
   <meta charset="UTF-8">
   <title>Study Tour Calculator</title>
   <style>
+    /* 1) Make all elements use border-box so paddings don’t mess with height */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2) Give every input/select/textarea a fixed height */
+input, select, textarea {
+  height: 44px;          /* pick a comfortable height */
+  line-height: normal;   /* reset any browser default */
+}
+
+/* 3) Top-align your flex cells */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: flex-start;   /* <-- makes all cells line up at the top */
+}
+.form-row > div {
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* also make label + input hug the top */
+}
     body {
       background: #fff;
       font-family: 'Segoe UI', Arial, sans-serif;
