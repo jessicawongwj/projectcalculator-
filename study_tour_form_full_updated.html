@@ -1,6 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <style>
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f7fa;
+}
+
+.form-container {
+  background: #fff;
+  max-width: 520px;
+  margin: 40px auto 0 auto;
+  padding: 32px 28px;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+}
+
+h2 {
+  color: #4b006e;
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ced4da;
+  border-radius: 7px;
+  font-size: 15px;
+  background: #f8f8fd;
+  transition: border 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #4b006e;
+  outline: none;
+  background: #fff;
+}
+
+input[type="submit"], button {
+  background: #4b006e;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 7px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s;
+}
+
+input[type="submit"]:hover, button:hover {
+  background: #35004d;
+}
+</style>
   <meta charset="UTF-8">
   <title>Study Tour Calculator</title>
   <style>
