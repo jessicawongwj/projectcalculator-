@@ -136,13 +136,36 @@ input, select, textarea {
       text-align: right;
     }
 
-    .remove-btn {
-      background: #e74c3c;
-      color: #fff;
+    <head>
+  …
+  <style>
+    /* —— minimal table & remove-button styles —— */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+      font-size: 14px;
+    }
+    button.remove {
+      background: none;
       border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
+      font-size: 16px;
+      line-height: 1;
       cursor: pointer;
+      color: #888;
+    }
+    button.remove:hover {
+      color: #444;
+    }
+
+    /* …your other styles below… */
+  </style>
+</head>
     }
   </style>
 </head>
