@@ -2,90 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cost Table with Others Category</title>
+  <title>Study Tour Calculator</title>
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    input, select, textarea {
+      height: 44px;
+      line-height: normal;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 7px;
+      font-size: 15px;
+      background: #f8f8fd;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #4b006e;
+      background: #fff;
+      outline: none;
+    }
+    body {
+      background: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .form-container {
+      background: #fff;
+      max-width: 2200px;
+      margin: 40px auto;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+    }
+    h2 {
+      color: #4b006e;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+    button {
+      background: #4b006e;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-left: 8px;
+    }
+    button:hover {
+      background: #35004d;
+    }
+    @media print {
+      input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn { display: none; }
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: flex-start;
+    }
+    .form-row > div {
+      flex: 1 1 calc(33.333% - 16px);
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
-    th, td {
+    table th, table td {
       border: 1px solid #ccc;
       padding: 8px;
       text-align: left;
     }
-    th {
+    table th {
       background: #4b006e;
       color: #fff;
     }
-    .qty, .unit {
-      width: 80px;
+    .summary {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .summary .line {
+      display: flex;
+      gap: 10px;
+    }
+    .summary .label {
+      width: 120px;
+      font-weight: bold;
+      text-align: right;
+    }
+    .summary .value {
+      width: 100px;
+      text-align: right;
+    }
+    button.remove-btn {
+      background: none;
+      border: none;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+      color: #888;
+      padding: 0 6px;
+      margin-right: 4px;
+    }
+    button.remove-btn:hover {
+      color: #444;
+    }
+    input.notes {
+      width: 110px;
+      font-size: 13px;
+      padding: 6px;
     }
   </style>
 </head>
 <body>
-  <h2>Cost Table</h2>
-  <table id="costTable">
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Item</th>
-        <th style="width: 80px;">Qty</th>
-        <th style="width: 120px;">Unit $</th>
-        <th>Total $</th>
-        <th>Notes</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="costItems">
-      <tr>
-        <td>
-          <select class="category">
-            <option>Labour</option>
-            <option>Learning Materials</option>
-            <option>Transport</option>
-            <option>Others</option>
-          </select>
-        </td>
-        <td class="item-cell">
-          <select class="item">
-            <option>Trainer Cost - Business Days</option>
-            <option>Trainer Cost - Weekend (20% Levy)</option>
-            <option>Administrative Cost - Business Days</option>
-            <option>Administrative Cost - Weekend (20% Levy)</option>
-            <option>Media Team Cost – Business Days</option>
-          </select>
-        </td>
-        <td><input type="number" class="qty" value="1" min="1" /></td>
-        <td><input type="number" class="unit" value="0" /></td>
-        <td class="total">$0.00</td>
-        <td><input type="text" class="notes" placeholder="Optional info" /></td>
-        <td><button class="remove-btn">x</button></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <script>
-    // Swap item cell to text input if "Others" is selected
-    document.querySelectorAll('.category').forEach(function(select) {
-      select.addEventListener('change', function() {
-        const itemCell = select.closest('tr').querySelector('.item-cell');
-        if (select.value === 'Others') {
-          itemCell.innerHTML = '<input type="text" class="item-input" placeholder="Enter custom item">';
-        } else {
-          itemCell.innerHTML = `<select class="item">
-            <option>Trainer Cost - Business Days</option>
-            <option>Trainer Cost - Weekend (20% Levy)</option>
-            <option>Administrative Cost - Business Days</option>
-            <option>Administrative Cost - Weekend (20% Levy)</option>
-            <option>Media Team Cost – Business Days</option>
-          </select>`;
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+  <div class="form-container">
+    <div style="text-align:left; margin-bottom:20px;">
+      <img src="charlton-brown-logo.jpeg" alt="Charlton Brown Logo" style="height:80px;">
+    </div>
+    <h2>STUDY TOUR</h2>
+    <!-- Top six fields -->
+    <div class="form-row">
+      <div>
+        <label for="studentGroupName">Student Group Name</label>
+        <input id="studentGroupName" placeholder="e.g. entity"/>
+      </div>
+      <div>
+        <label for="studentGroup">Student Group</label>
+        <input id="studentGroup" placeholder="e.g. Year 9 (13–14yrs)"/>
+      </div>
+      <div>
+        <label for="numStudents">Number of Students</label>
+        <input id="numStudents" type="number" placeholder="e.g. 40" min="1"/>
+      </div>
+      <div>
+        <label for="startDate">Date</label>
+        <input id="startDate" type="date"/>
+      </div>
+      <div>
+        <label for="weeks">Weeks</label>
+        <input id="weeks" type="number" placeholder="e.g. 1" min="1"/>
+      </div>
+      <div>
+        <label for="timeRange">Time (hrs)</label>
+        <input id="timeRange" placeholder="e.g. 9am–3pm"/>
+      </div>
+    </div>
+    <!-- Cost table -->
+    <table id="costTable">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Item</th>
+           <th style="width: 80px;">Qty</th>
+    <th style="width: 120px;">Unit $</th>
+          <th>Total $</th>
+          <th>Optional Info</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="costItems">
+        <tr class="fixed-row">
+          <td><select disabled><option>Application Fee</option></select></td>
+          <td><select disabled><option>Application Fee</option></select></td>
+          <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
+          <td><input type="number" class="unit" value="250" onchange="updateFixedRowTotal(this)"/></td>
+          <td class="total">$250.00</td>
+          <td><input type="text" class="notes" placeholder="Optional info"/></td>
+          <td><button class="remove-btn" style="font-size:12px;padding:0 6px;">x</button></td>
+        </tr>
+        <tr class="fixed-row">
+          <td><select disabled><option>Labour</option></select></td>
+          <td>
+            <select class="item">
+              <option>Trainer Cost - Business Days</option>
+              <option>Trainer Cost - Weekend (20% Levy)</option>
+              <option>Administrative Cost - Business Days</option>
+              <option>Administrative Cost - Weekend (20% Levy)</option>
+              <option>Media Team Cost – Business Days</option>
+            </select>
           </td>
           <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
           <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
