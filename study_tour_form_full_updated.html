@@ -4,32 +4,25 @@
   <meta charset="UTF-8">
   <title>Study Tour Calculator</title>
   <style>
-    /* 1) Make all elements use border-box so paddings don’t mess with height */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-/* 2) Give every input/select/textarea a fixed height */
-input, select, textarea {
-  height: 44px;          /* pick a comfortable height */
-  line-height: normal;   /* reset any browser default */
-}
-
-/* 3) Top-align your flex cells */
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
-  align-items: flex-start;   /* <-- makes all cells line up at the top */
-}
-.form-row > div {
-  flex: 1 1 calc(33.333% - 16px);
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* also make label + input hug the top */
-}
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    input, select, textarea {
+      height: 44px;
+      line-height: normal;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 7px;
+      font-size: 15px;
+      background: #f8f8fd;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #4b006e;
+      background: #fff;
+      outline: none;
+    }
     body {
       background: #fff;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -54,20 +47,6 @@ input, select, textarea {
       margin-bottom: 6px;
       display: block;
     }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ced4da;
-      border-radius: 7px;
-      font-size: 15px;
-      background: #f8f8fd;
-      transition: border 0.2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: #4b006e;
-      background: #fff;
-      outline: none;
-    }
     button {
       background: #4b006e;
       color: #fff;
@@ -85,21 +64,20 @@ input, select, textarea {
     @media print {
       input, select, button, .remove-btn, .add-row-btn, #calcBtn, #exportBtn { display: none; }
     }
-
-    /* Flex-wrap layout for the six top fields */
     .form-row {
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
       margin-bottom: 24px;
+      align-items: flex-start;
     }
     .form-row > div {
       flex: 1 1 calc(33.333% - 16px);
       min-width: 200px;
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -114,7 +92,6 @@ input, select, textarea {
       background: #4b006e;
       color: #fff;
     }
-
     .summary {
       margin-top: 20px;
       display: flex;
@@ -135,62 +112,23 @@ input, select, textarea {
       width: 100px;
       text-align: right;
     }
-
-    <head>
-    <head>
-  <meta charset="UTF-8">
-  <title>Study Tour Cost Table</title>
-  <style>
-    /* ← paste the updated remove styles here */
-    button.remove {
+    button.remove-btn {
       background: none;
       border: none;
       font-size: 12px;
       line-height: 1;
       cursor: pointer;
-      color: rgba(0,0,0,0.3);
-      padding: 0;
-      margin: 0;
-    }
-    button.remove:hover {
-      color: rgba(0,0,0,0.6);
-    }
-
-    /* …the rest of your table/CSS lives below… */
-    table { /* … */ }
-    th, td { /* … */ }
-    /* etc. */
-  </style>
-</head>
-  …
-  <style>
-    /* —— minimal table & remove-button styles —— */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    th, td {
-      padding: 8px 6px;
-      border-bottom: 1px solid #ccc;
-      text-align: left;
-      font-size: 14px;
-    }
-    button.remove {
-      background: none;
-      border: none;
-      font-size: 16px;
-      line-height: 1;
-      cursor: pointer;
       color: #888;
+      padding: 0 6px;
+      margin-right: 4px;
     }
-    button.remove:hover {
+    button.remove-btn:hover {
       color: #444;
     }
-
-    /* …your other styles below… */
-  </style>
-</head>
+    input.notes {
+      width: 110px;
+      font-size: 13px;
+      padding: 6px;
     }
   </style>
 </head>
@@ -199,9 +137,7 @@ input, select, textarea {
     <div style="text-align:left; margin-bottom:20px;">
       <img src="charlton-brown-logo.jpeg" alt="Charlton Brown Logo" style="height:80px;">
     </div>
-
     <h2>STUDY TOUR</h2>
-
     <!-- Top six fields -->
     <div class="form-row">
       <div>
@@ -229,7 +165,6 @@ input, select, textarea {
         <input id="timeRange" placeholder="e.g. 9am–3pm"/>
       </div>
     </div>
-
     <!-- Cost table -->
     <table id="costTable">
       <thead>
@@ -239,6 +174,7 @@ input, select, textarea {
           <th>Qty</th>
           <th>Unit $</th>
           <th>Total $</th>
+          <th>Notes</th>
           <th></th>
         </tr>
       </thead>
@@ -250,6 +186,7 @@ input, select, textarea {
           <td><input type="number" class="unit" value="250" onchange="updateFixedRowTotal(this)"/></td>
           <td class="total">$250.00</td>
           <td><input type="text" class="notes" placeholder="Optional info"/></td>
+          <td><button class="remove-btn" style="font-size:12px;padding:0 6px;">x</button></td>
         </tr>
         <tr class="fixed-row">
           <td><select disabled><option>Labour</option></select></td>
@@ -266,17 +203,16 @@ input, select, textarea {
           <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
           <td class="total">$0.00</td>
           <td><input type="text" class="notes" placeholder="Optional info"/></td>
+          <td><button class="remove-btn" style="font-size:12px;padding:0 6px;">x</button></td>
         </tr>
       </tbody>
     </table>
-
     <!-- Buttons -->
     <div style="text-align:right; margin-top:16px;">
       <button class="add-row-btn" onclick="addRow()">+ Add Cost Item</button>
       <button id="calcBtn" onclick="calculateTotal()">Calculate</button>
       <button id="exportBtn" onclick="exportTable()">Export Table</button>
     </div>
-
     <!-- Profit margin -->
     <div class="form-row" style="margin-top:24px;">
       <div></div><!-- spacer -->
@@ -285,7 +221,6 @@ input, select, textarea {
         <input id="profitMargin" type="number" value="20" min="0"/>
       </div>
     </div>
-
     <!-- Summary -->
     <div class="summary">
       <div class="line"><div class="label">Base</div><div id="baseTotal" class="value">$0.00</div></div>
@@ -294,7 +229,6 @@ input, select, textarea {
       <div class="line"><div class="label">Price / Student</div><div id="pricePerStudent" class="value">$0.00</div></div>
     </div>
   </div>
-
   <script>
     // Update fixed rows (Application Fee & Labour)
     function updateFixedRowTotal(input) {
@@ -304,7 +238,6 @@ input, select, textarea {
       tr.querySelector('.total').textContent = `$${(qty * unit).toFixed(2)}`;
       calculateTotal();
     }
-
     // Dataset of categories → items
     const dataset = {
       "Labour": [
@@ -368,7 +301,6 @@ input, select, textarea {
         "Stradbroke Island Day Tour - 61 seat coach"
       ]
     };
-
     // Default per-item prices
     const defaultPrices = {
       "Application Fee": 250,
@@ -431,7 +363,6 @@ input, select, textarea {
       "Aviation Class": 0,
       "Other Activities": 0
     };
-
     function addRow() {
       const tbody = document.getElementById('costItems');
       const tr = document.createElement('tr');
@@ -446,7 +377,8 @@ input, select, textarea {
         <td><input type="number" class="qty" value="1" min="1"/></td>
         <td><input type="number" class="unit" value="0"/></td>
         <td class="total">$0.00</td>
-        <td><button class="remove-btn" onclick="this.closest('tr').remove(); calculateTotal();">x</button></td>
+        <td><input type="text" class="notes" placeholder="Optional info"/></td>
+        <td><button class="remove-btn" style="font-size:12px;padding:0 6px;" onclick="this.closest('tr').remove(); calculateTotal();">x</button></td>
       `;
       // insert after the two fixed rows
       const fixedRows = tbody.querySelectorAll('.fixed-row');
@@ -483,13 +415,11 @@ input, select, textarea {
         });
       });
     }
-
     function updateRowTotal(tr) {
       const qty = parseFloat(tr.querySelector('.qty').value) || 0;
       const unit = parseFloat(tr.querySelector('.unit').value) || 0;
       tr.querySelector('.total').textContent = `$${(qty * unit).toFixed(2)}`;
     }
-
     function calculateTotal() {
       let base = 0;
       let baseForProfit = 0;
@@ -509,9 +439,8 @@ input, select, textarea {
       document.getElementById('finalTotal').textContent = `$${finalTotal.toFixed(2)}`;
       document.getElementById('pricePerStudent').textContent = `$${(finalTotal/num).toFixed(2)}`;
     }
-
     function exportTable() {
-      let csv = 'Item,Total $\\n';
+      let csv = 'Item,Total $,Notes\n';
       document.querySelectorAll('#costItems tr').forEach(tr => {
         let itemVal = '';
         const itemCell = tr.cells[1];
@@ -523,11 +452,13 @@ input, select, textarea {
         }
         const totalCell = tr.querySelector('.total');
         const totalVal = totalCell ? totalCell.textContent : '';
+        const notesCell = tr.querySelector('.notes');
+        const noteVal = notesCell ? notesCell.value : '';
         if (itemVal && totalVal) {
-          csv += `"${itemVal.replace(/"/g, '""')}",${totalVal}\\n`;
+          csv += `"${itemVal.replace(/"/g, '""')}",${totalVal},"${noteVal.replace(/"/g, '""')}"\n`;
         }
       });
-      csv += `Final Total,${document.getElementById('finalTotal').textContent}\\n`;
+      csv += `Final Total,${document.getElementById('finalTotal').textContent},\n`;
       const blob = new Blob([csv], {type:'text/csv'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
