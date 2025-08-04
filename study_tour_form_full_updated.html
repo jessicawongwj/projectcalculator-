@@ -130,6 +130,29 @@
       font-size: 13px;
       padding: 6px;
     }
+    .edit-btn {
+      margin-left: 6px;
+      background: #009688;
+      color: #fff;
+      border-radius: 7px;
+      font-size: 13px;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+    }
+    .edit-btn:hover {
+      background: #00796b;
+    }
+    .edit-input {
+      margin-top: 4px;
+      width: calc(100% - 26px);
+      font-size: 15px;
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      background: #fffbe7;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -198,6 +221,7 @@
               <option>Administrative Cost - Weekend (20% Levy)</option>
               <option>Media Team Cost – Business Days</option>
             </select>
+            <button type="button" class="edit-btn">Edit</button>
           </td>
           <td><input type="number" class="qty" value="1" min="1" onchange="updateFixedRowTotal(this)"/></td>
           <td><input type="number" class="unit" value="0" onchange="updateFixedRowTotal(this)"/></td>
@@ -363,58 +387,54 @@
       "Aviation Class": 0,
       "Other Activities": 0
     };
-    function addRow() {
-      const tbody = document.getElementById('costItems');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>
-          <select class="category">
-            <option value="">Select category</option>
-            ${Object.keys(dataset).map(c => `<option>${c}</option>`).join('')}
-          </select>
-        </td>
-        <td><select class="item"><option value="">Select item</option></select></td>
-        <td><input type="number" class="qty" value="1" min="1"/></td>
-        <td><input type="number" class="unit" value="0"/></td>
-        <td class="total">$0.00</td>
-        <td><input type="text" class="notes" placeholder="Optional info"/></td>
-        <td><button class="remove-btn" style="font-size:12px;padding:0 6px;" onclick="this.closest('tr').remove(); calculateTotal();">x</button></td>
-      `;
-      // insert after the two fixed rows
-      const fixedRows = tbody.querySelectorAll('.fixed-row');
-      if (fixedRows.length >= 2) {
-        tbody.insertBefore(tr, fixedRows[1].nextSibling);
-      } else {
-        tbody.appendChild(tr);
-      }
-      // wire up events
-      tr.querySelector('.category').addEventListener('change', function() {
-        const items = dataset[this.value] || [];
-        const sel = tr.querySelector('.item');
-        sel.innerHTML = '<option>Select item</option>' + items.map(i => `<option>${i}</option>`).join('');
-      });
-      tr.querySelector('.item').addEventListener('change', function() {
-        const price = defaultPrices[this.value] || 0;
-        tr.querySelector('.unit').value = price;
-        updateRowTotal(tr);
-        calculateTotal();
-        if (this.value === "Other Activities") {
-          const td = this.parentElement;
-          const input = document.createElement('input');
-          input.type = "text";
-          input.value = "Other Activities";
-          input.className = "custom-activity";
-          td.innerHTML = '';
-          td.appendChild(input);
+
+    // Make all dropdowns editable
+    function makeDropdownsEditable() {
+      // Select all dropdowns in the cost table
+      document.querySelectorAll('#costTable select:not([disabled])').forEach(function(sel) {
+        // Only add if not already present
+        if (!sel.nextElementSibling || !sel.nextElementSibling.classList.contains('edit-btn')) {
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'edit-btn';
+          editBtn.textContent = 'Edit';
+
+          editBtn.addEventListener('click', function() {
+            // Remove any previous edit input
+            let oldInput = sel.parentElement.querySelector('.edit-input');
+            if (oldInput) oldInput.remove();
+            // Create input
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'edit-input';
+            input.value = sel.options[sel.selectedIndex].text;
+            sel.parentElement.appendChild(input);
+            input.focus();
+            input.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter') {
+                sel.options[sel.selectedIndex].text = input.value;
+                input.remove();
+              }
+            });
+            input.addEventListener('blur', function() {
+              sel.options[sel.selectedIndex].text = input.value;
+              input.remove();
+            });
+          });
+          sel.parentElement.appendChild(editBtn);
         }
       });
-      ['qty','unit'].forEach(cls => {
-        tr.querySelector(`.${cls}`).addEventListener('input', () => {
-          updateRowTotal(tr);
-          calculateTotal();
-        });
-      });
     }
+    // Call after DOMContentLoaded and after adding rows
+    document.addEventListener('DOMContentLoaded', makeDropdownsEditable);
+    // Also call after every new row is added
+    const oldAddRow = addRow;
+    addRow = function() {
+      oldAddRow();
+      makeDropdownsEditable();
+    };
+
+    // Existing JS unchanged...
     function updateRowTotal(tr) {
       const qty = parseFloat(tr.querySelector('.qty').value) || 0;
       const unit = parseFloat(tr.querySelector('.unit').value) || 0;
@@ -469,4 +489,3 @@
   </script>
 </body>
 </html>
-
