@@ -239,130 +239,31 @@
       calculateTotal();
     }
     // Dataset of categories → items
-    const dataset = {
-      "Labour": [
-        "Trainer Cost - Business Days", "Trainer Cost - Weekend (20% Levy)",
-        "Administrative Cost - Business Days", "Administrative Cost - Weekend (20% Levy)",
-        "Media Team Cost – Business Days"
-      ],
-      "Learning Materials": [
-        "Child Care (Equipment Usage)", "Cookery (Cooking Materials)",
-        "ELICOS (Printing Material)", "First Aid"
-      ],
-      "Course-Related Direct Costs": [
-        "Cookery - Commercial Cookery Kitchen"
-      ],
-      "Accommodation": [
-        "Homestay Twin", "Full Year 2025 Studio", "Semester One 2025 Studio",
-        "Semester Two 2025 Studio", "Short Stay Studio", "Placement Fee","Homestay Single"
-        ,"Escort Homestay Fee"
-      ],
-      "Application Fee": ["Application Fee"],
-      "Activity": [
-        "University Campus Tour - Half Day (15-20)",
-        "University Campus Tour - Half Day (21-30)",
-        "University Campus Tour - Half Day (31-39)",
-        "University Campus Tour - Half Day (40+)",
-        "University Campus Tour - Full Day (15-20)",
-        "University Campus Tour - Full Day (21-30)",
-        "University Campus Tour - Full Day (31-39)",
-        "University Campus Tour - Full Day (40+)",
-        "University Campus Tour + Science Lab Visit - Half Day (15-20)",
-        "University Campus Tour + Science Lab Visit - Half Day (21-30)",
-        "University Campus Tour + Science Lab Visit - Half Day (31-39)",
-        "University Campus Tour + Science Lab Visit - Full Day (15-20)",
-        "University Campus Tour + Science Lab Visit - Full Day (21-30)",
-        "University Campus Tour + Science Lab Visit - Full Day (31-39)",
-        "Day Tour in Brisbane", "High School Visit",
-        "Day Tour to Gold Coast with Theme Park Visit",
-        "Aviation Class", "Other Activities"
-      ],
-      "Transport": [
-        "BNE Airport to City, or return - Single Pax",
-        "BNE Airport to City, or return - 10 seat mini bus",
-        "BNE Airport to City, or return - 21/24 seat mini bus",
-        "BNE Airport to City, or return - 39 seat midi coach",
-        "BNE Airport to City, or return - 57 seat coach",
-        "BNE Airport to City, or return - 61 seat coach",
-        "8hr Tour Local - 10 seat mini bus", "8hr Tour Local - 21/24 seat mini bus",
-        "8hr Tour Local - 39 seat midi coach", "8hr Tour Local - 57 seat coach",
-        "8hr Tour Local - 61 seat coach",
-        "8hr Tour Over 100km - 10 seat mini bus", "8hr Tour Over 100km - 21/24 seat mini bus",
-        "8hr Tour Over 100km - 39 seat midi coach", "8hr Tour Over 100km - 57 seat coach",
-        "8hr Tour Over 100km - 61 seat coach",
-        "Theme Park Transfers - 10 seat mini bus", "Theme Park Transfers - 21/24 seat mini bus",
-        "Theme Park Transfers - 39 seat midi coach", "Theme Park Transfers - 57 seat coach",
-        "Theme Park Transfers - 61 seat coach",
-        "Australia Zoo - 10 seat mini bus", "Australia Zoo - 21/24 seat mini bus",
-        "Australia Zoo - 39 seat midi coach", "Australia Zoo - 57 seat coach",
-        "Australia Zoo - 61 seat coach",
-        "Stradbroke Island Day Tour - 10 seat mini bus", "Stradbroke Island Day Tour - 21/24 seat mini bus",
-        "Stradbroke Island Day Tour - 39 seat midi coach", "Stradbroke Island Day Tour - 57 seat coach",
-        "Stradbroke Island Day Tour - 61 seat coach"
-      ]
-    };
-    // Default per-item prices
-    const defaultPrices = {
-      "Application Fee": 250,
-      "Escort Placement Fee": 380,
-      "Homestay Twin": 400,
-      "Full Year 2025 Studio": 299,
-      "Semester One 2025 Studio": 329,
-      "Semester Two 2025 Studio": 329,
-      "Short Stay Studio": 359,
-      "BNE Airport to City, or return - Single Pax": 132,
-      "BNE Airport to City, or return - 10 seat mini bus": 220,
-      "BNE Airport to City, or return - 21/24 seat mini bus": 297,
-      "BNE Airport to City, or return - 39 seat midi coach": 341,
-      "BNE Airport to City, or return - 57 seat coach": 385,
-      "BNE Airport to City, or return - 61 seat coach": 407,
-      "8hr Tour Local - 10 seat mini bus": 850,
-      "8hr Tour Local - 21/24 seat mini bus": 990,
-      "8hr Tour Local - 39 seat midi coach": 1100,
-      "8hr Tour Local - 57 seat coach": 1210,
-      "8hr Tour Local - 61 seat coach": 1250,
-      "8hr Tour Over 100km - 10 seat mini bus": 880,
-      "8hr Tour Over 100km - 21/24 seat mini bus": 1100,
-      "8hr Tour Over 100km - 39 seat midi coach": 1210,
-      "8hr Tour Over 100km - 57 seat coach": 1320,
-      "8hr Tour Over 100km - 61 seat coach": 1430,
-      "Theme Park Transfers - 10 seat mini bus": 638,
-      "Theme Park Transfers - 21/24 seat mini bus": 770,
-      "Theme Park Transfers - 39 seat midi coach": 880,
-      "Theme Park Transfers - 57 seat coach": 990,
-      "Theme Park Transfers - 61 seat coach": 1100,
-      "Australia Zoo - 10 seat mini bus": 880,
-      "Australia Zoo - 21/24 seat mini bus": 1100,
-      "Australia Zoo - 39 seat midi coach": 1210,
-      "Australia Zoo - 57 seat coach": 1320,
-      "Australia Zoo - 61 seat coach": 1430,
-      "Stradbroke Island Day Tour - 10 seat mini bus": 1320,
-      "Stradbroke Island Day Tour - 21/24 seat mini bus": 1540,
-      "Stradbroke Island Day Tour - 39 seat midi coach": 1650,
-      "Stradbroke Island Day Tour - 57 seat coach": 1760,
-      "Stradbroke Island Day Tour - 61 seat coach": 1870,
-      "University Campus Tour - Half Day (15-20)": 123,
-      "University Campus Tour - Half Day (21-30)": 116,
-      "University Campus Tour - Half Day (31-39)": 110,
-      "University Campus Tour - Half Day (40+)": 104,
-      "University Campus Tour - Full Day (15-20)": 180,
-      "University Campus Tour - Full Day (21-30)": 171,
-      "University Campus Tour - Full Day (31-39)": 162,
-      "University Campus Tour - Full Day (40+)": 168,
-      "University Campus Tour + Science Lab Visit - Half Day (15-20)": 123,
-      "University Campus Tour + Science Lab Visit - Half Day (21-30)": 116,
-      "University Campus Tour + Science Lab Visit - Half Day (31-39)": 110,
-      "University Campus Tour + Science Lab Visit - Half Day (40+)": 104,
-      "University Campus Tour + Science Lab Visit - Full Day (15-20)": 180,
-      "University Campus Tour + Science Lab Visit - Full Day (21-30)": 171,
-      "University Campus Tour + Science Lab Visit - Full Day (31-39)": 162,
-      "University Campus Tour + Science Lab Visit - Full Day (40+)": 168,
-      "Day Tour in Brisbane": 0,
-      "High School Visit": 0,
-      "Day Tour to Gold Coast with Theme Park Visit": 0,
-      "Aviation Class": 0,
-      "Other Activities": 0
-    };
+    let dataset = {};
+let defaultPrices = {};
+
+fetch("https://myniet-my.sharepoint.com/:u:/g/personal/jessica_wong_niet_edu_au/EZ8f4IAtHQ1AjkoV-pzu1HQBiYTRU48IiUjqWTBszjKo3g?e=eXPYcO")
+  .then(res => res.json())
+  .then(data => {
+    dataset = {};
+    defaultPrices = {};
+
+    data.forEach(row => {
+      const cat = row["Category"];
+      const item = row["Item"];
+      const price = parseFloat(row["Default Price"]) || 0;
+
+      if (!dataset[cat]) dataset[cat] = [];
+      dataset[cat].push(item);
+      defaultPrices[item] = price;
+    });
+
+    console.log("✅ Pricing loaded from JSON");
+  })
+  .catch(err => {
+    console.error("⚠️ Failed to load pricing data:", err);
+    alert("Unable to load the latest pricing data.");
+  });
     function addRow() {
       const tbody = document.getElementById('costItems');
       const tr = document.createElement('tr');
